@@ -63,3 +63,15 @@ export async function signOut() {
     redirect("/");
   }
 }
+
+export async function signWithGoogle() {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+
+  if (!error) {
+    redirect("/user");
+  }
+}
