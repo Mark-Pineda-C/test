@@ -13,6 +13,9 @@ export default function GoogleLogin() {
       onPress={() =>
         supabase.auth.signInWithOAuth({
           provider: "google",
+          options: {
+            redirectTo: "https://test-seven-ivory-10.vercel.app/user",
+          },
         })
       }
     >

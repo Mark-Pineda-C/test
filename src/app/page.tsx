@@ -19,7 +19,7 @@ export default async function Home() {
       <div className="flex flex-col items-center gap-6 text-foreground px-4">
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-2xl text-center font-bold">
-            Introduce tu número de teléfono
+            Introduce tu número de teléfono v2
           </h1>
           <p className="text-small text-foreground-500 text-center text-balance">
             Te enviaremos un código para verificar tu número telefónico
