@@ -1,8 +1,19 @@
-import { UimGoogle } from "@/components/icons";
-import { Button, Input, Link } from "@nextui-org/react";
-import Image from "next/image";
+import GoogleLogin from "@/components/google-login";
+import PhoneInput from "@/components/phone-input";
+import { createClient } from "@/utils/supabase/server";
+import { Button, Link } from "@nextui-org/react";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createClient();
+
+  const { data } = await supabase.auth.getUser();
+
+  if (data.user?.app_metadata.provider === "google") {
+    console.log("hay usuario");
+    redirect("/user");
+  }
+
   return (
     <main className="grid min-h-screen bg-background w-full place-items-center">
       <div className="flex flex-col items-center gap-6 text-foreground px-4">
@@ -14,17 +25,11 @@ export default function Home() {
             Te enviaremos un código para verificar tu número telefónico
           </p>
         </div>
-        <Input placeholder="Numero de telefono" type="number" />
-        <Button color="primary" className="w-full">
-          Enviar código
-        </Button>
+
+        <PhoneInput />
+
         <p className="text-xs text-foreground-500">O inicia sesion con</p>
-        <Button
-          className="w-full"
-          startContent={<UimGoogle className="text-2xl" />}
-        >
-          Continuar con Google
-        </Button>
+        <GoogleLogin />
         <p className="text-xs text-foreground-500 text-center">
           Al unirte a nuestra aplicación, aceptas nuestros{" "}
           <Link
