@@ -67,11 +67,46 @@ export async function signOut() {
 export async function signWithGoogle() {
   const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: "https://test-seven-ivory-10.vercel.app/auth/callback",
+    },
   });
 
-  if (!error) {
-    redirect("/user");
+  if (data.url) {
+    redirect(data.url);
   }
+}
+
+export async function signWithEmail(formData: FormData) {
+  const supabase = createClient();
+  const input = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
+
+  if (!input.email) {
+    return {
+      type: "error",
+      msg: "El email es obligatorio",
+    };
+  }
+  if (!input.password) {
+    return {
+      type: "error",
+      msg: "La contraseña es obligatoria",
+    };
+  }
+
+  const { data, error } = await supabase.auth.signInWithPassword({ ...input });
+
+  if (error) {
+    return {
+      type: "error",
+      msg: error.message,
+    };
+  }
+
+  redirect("/user");
 }
