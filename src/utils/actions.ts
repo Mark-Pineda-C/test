@@ -5,12 +5,22 @@ import { createClient } from "./supabase/server";
 
 export async function sendOtp(formData: FormData) {
   const supabase = createClient();
-  if (!formData.get("phone")) {
+
+  const input = {
+    name: formData.get("name") as string,
+    phone: formData.get("phone") as string,
+  };
+
+  if (!input.phone) {
     console.log("no hay fono");
-    return;
+    return {
+      error: "Ingrese el número de teléfono",
+      name: null,
+      phone: null,
+    };
   }
 
-  const phone = `+51${formData.get("phone")}`;
+  const phone = `+51${input.phone}`;
 
   console.log(phone);
   const { data, error } = await supabase.auth.signInWithOtp({
@@ -19,17 +29,17 @@ export async function sendOtp(formData: FormData) {
 
   if (error) {
     console.log(error);
-    return error.message;
+    return { error: error.message, name: null, phone: null };
   }
 
-  redirect(`/verify-otp?phone=${phone}`);
+  return { error: null, ...input };
 }
 
 export async function verifyOtp(formData: FormData) {
   const supabase = createClient();
   const input = {
-    phone: formData.get("phone") as string,
-    token: formData.get("otp") as string,
+    phone: `51${formData.get("phone") as string}`,
+    token: formData.get("token") as string,
   };
   if (!input.phone) {
     console.log("no hay fono");
@@ -40,6 +50,8 @@ export async function verifyOtp(formData: FormData) {
     return;
   }
 
+  console.log(input);
+
   const {
     data: { session },
     error,
@@ -49,10 +61,22 @@ export async function verifyOtp(formData: FormData) {
   });
 
   if (error) {
+    console.log(error);
     return;
   }
   if (session) {
-    redirect("/user");
+    const { error } = await supabase.auth.updateUser({
+      phone: input.phone,
+      data: {
+        full_name: formData.get("name") as string,
+        phone: input.phone,
+      },
+    });
+
+    if (error) {
+      console.log(error);
+    }
+    redirect("/auth/set-user-type");
   }
 }
 
@@ -67,14 +91,19 @@ export async function signOut() {
 export async function signWithGoogle() {
   const supabase = createClient();
 
+  const isLocalEnv = process.env.NODE_ENV === "development";
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "https://test-seven-ivory-10.vercel.app/auth/callback",
+      redirectTo: isLocalEnv
+        ? "http://localhost:3000/auth/callback"
+        : "https://test-seven-ivory-10.vercel.app/auth/callback",
     },
   });
 
   if (data.url) {
+    console.log(data.url);
     redirect(data.url);
   }
 }
