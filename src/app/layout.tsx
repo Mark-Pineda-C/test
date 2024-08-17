@@ -5,10 +5,11 @@ import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const APP_NAME = "PWA App";
-const APP_DEFAULT_TITLE = "My Awesome PWA App";
-const APP_TITLE_TEMPLATE = "%s - PWA App";
-const APP_DESCRIPTION = "Best PWA app in the world!";
+const APP_NAME = "HERCOM App";
+const APP_DEFAULT_TITLE = "HERCOM App - Choferes de reemplazo";
+const APP_TITLE_TEMPLATE = "%s - HERCOM App";
+const APP_DESCRIPTION =
+  "La mejor aplicación para encontrar choferes de reemplazo en la Ciudad de Lima.";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -49,7 +50,7 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -57,7 +58,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <main className="bg-app-background text-app-foreground">
+            {children}
+          </main>
+        </Providers>
       </body>
     </html>
   );

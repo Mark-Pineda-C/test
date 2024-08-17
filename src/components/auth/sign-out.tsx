@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "@/utils/actions";
+import { signOut } from "@/utils/actions/auth";
 import { Button } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
 

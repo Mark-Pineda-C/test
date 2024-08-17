@@ -1,6 +1,6 @@
 {
-  "name": "My Awesome PWA app",
-  "short_name": "PWA App",
+  "name": "HERCOM App - Choferes de reemplazo",
+  "short_name": "HERCOM App",
   "icons": [
     {
       "src": "/icons/android-chrome-192x192.png",
