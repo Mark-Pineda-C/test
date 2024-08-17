@@ -10,6 +10,7 @@ const withSerwist = withSerwistInit({
   cacheOnNavigation: false,
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
+  scope: "/search",
   additionalPrecacheEntries: [{ url: "src/~offline", revision }],
 });
 

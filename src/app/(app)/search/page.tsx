@@ -21,6 +21,31 @@ export default async function Page() {
       <Avatar userId={user.id} />
       <SignOut />
       <DriverAplicationButton userId={user.id} />
+      <form action="">
+        <label htmlFor="selfie">Take a picture of your face:</label>
+
+        <input
+          type="file"
+          id="selfie"
+          name="selfie"
+          accept="image/*"
+          capture="user"
+        />
+
+        <br />
+
+        <label htmlFor="picture">
+          Take a picture using back facing camera:
+        </label>
+
+        <input
+          type="file"
+          id="picture"
+          name="picture"
+          accept="image/*"
+          capture="environment"
+        />
+      </form>
     </div>
   );
 }
